@@ -2,10 +2,7 @@ package ca.uoit.csci4100u.intentsandui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public void getProvince(View view) {
         Intent getProvinceIntent = new Intent(
                 MainActivity.this,
-                SelectProvinceActivity.class
+                SelectProfileActivity.class
         );
         startActivityForResult(getProvinceIntent,
                                GET_PROVINCE_INTENT);
@@ -37,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                                responseCode,
                                resultIntent);
 
-        // TODO: handle the province select event
+        // TODO: handle the profile select event
     }
 
     @Override
