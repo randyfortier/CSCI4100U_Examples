@@ -6,10 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int GET_PROVINCE_INTENT = 1;
+    public static int SELECT_PROFILE_INTENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,9 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this,
                 SelectProfileActivity.class
         );
+        getProvinceIntent.putExtra("message", "Hello there");
         startActivityForResult(getProvinceIntent,
-                               GET_PROVINCE_INTENT);
+                SELECT_PROFILE_INTENT);
     }
 
     @Override
@@ -34,7 +36,14 @@ public class MainActivity extends AppCompatActivity {
                                responseCode,
                                resultIntent);
 
-        // TODO: handle the profile select event
+        // handle the profile select event
+        if (requestCode == SELECT_PROFILE_INTENT && responseCode == RESULT_OK) {
+            String profileName = resultIntent.getStringExtra("profileName");
+
+            // display the selected profile
+            TextView labelMessage = findViewById(R.id.labelMessage);
+            labelMessage.setText(profileName);
+        }
     }
 
     @Override
