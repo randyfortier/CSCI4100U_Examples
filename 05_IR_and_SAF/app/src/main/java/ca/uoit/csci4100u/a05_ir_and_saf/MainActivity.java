@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,7 +20,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String baseUrl = "http://services.aonaware.com/DictService/DictService.asmx/Define?word=";
+    //private String baseUrl = "http://services.aonaware.com/DictService/DictService.asmx/Define?word=";
+    private String baseUrl = "http://api.openweathermap.org/data/2.5/weather?lat=52&lon=81&units=metric&APPID=d469c49ee247c7dff53bfcad6a7585b4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,38 @@ public class MainActivity extends AppCompatActivity {
     class DownloadMeaningTask extends AsyncTask<String, Void, String> {
         private Exception exception = null;
 
+        /**
+         * Accessing JSON-based APIs
+         *
+         * Example web service:  http://api.openweathermap.org/data/2.5/weather?lat=52&lon=81&units=metric&APPID=YOUR KEY GOES HERE
+         *
+         * The format returned by this service is called JSON.  You can find out more about
+         * JSON at http://guide.couchdb.org/draft/json.html.
+         *
+         *
+         */
+
         @Override
         protected String doInBackground(String... params) {
+            try {
+                // test only, you would read from the URL as in the examples
+                String jsonData = "{\"coord\":{\"lon\":81,\"lat\":52},\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10n\"}],\"base\":\"stations\",\"main\":{\"temp\":3.98,\"pressure\":997.22,\"humidity\":75,\"temp_min\":3.98,\"temp_max\":3.98,\"sea_level\":1027.87,\"grnd_level\":997.22},\"wind\":{\"speed\":9.68,\"deg\":198.007},\"rain\":{\"3h\":0.3075},\"clouds\":{\"all\":92},\"dt\":1539877940,\"sys\":{\"message\":0.0033,\"country\":\"RU\",\"sunrise\":1539824785,\"sunset\":1539862490},\"id\":1492811,\"name\":\"Selivërstovo\",\"cod\":200}";
+
+                JSONObject results = new JSONObject(jsonData);
+                String weatherShort = results.getJSONArray("weather").getJSONObject(0).getString("main");
+                return weatherShort;
+                // if the data is in an array, instead of a dictionary
+            /*
+            JSONArray arr = results.getJSONArray("jokes");
+            for (int i = 0; i < arr.length(); i++) {
+                String jokeSetup = arr.getJSONObject(i).getString("joke_setup");
+            }
+            */
+            } catch(Exception e) {
+                this.exception = e;
+                e.printStackTrace();
+            }
+            /*
             try {
                 URL url = new URL(params[0]);
 
@@ -71,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 this.exception = e;
                 e.printStackTrace();
             }
+            */
             return null;
         }
 
