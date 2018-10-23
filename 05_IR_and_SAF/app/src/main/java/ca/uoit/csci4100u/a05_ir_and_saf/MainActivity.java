@@ -1,5 +1,7 @@
 package ca.uoit.csci4100u.a05_ir_and_saf;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,12 +15,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+                          implements DataLoaded {
+
+    public static int OPEN_TEXT_DOC_REQUEST = 1;
 
     //private String baseUrl = "http://services.aonaware.com/DictService/DictService.asmx/Define?word=";
     private String baseUrl = "http://api.openweathermap.org/data/2.5/weather?lat=52&lon=81&units=metric&APPID=d469c49ee247c7dff53bfcad6a7585b4";
@@ -34,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
         txtMeaning.setText(definition);
     }
 
+    public void showContent(String content) {
+        EditText txtContent = (EditText)findViewById(R.id.txtContent);
+        txtContent.setText(content);
+    }
+
     public void findMeaning(View view) {
         EditText txtName = (EditText)findViewById(R.id.txtName);
         String name = txtName.getText().toString();
@@ -43,6 +57,29 @@ public class MainActivity extends AppCompatActivity {
         // download the web service response
         DownloadMeaningTask downloadTask = new DownloadMeaningTask();
         downloadTask.execute(url);
+    }
+
+    public void loadData(View view) {
+        Intent openTextDoc = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        openTextDoc.addCategory(Intent.CATEGORY_OPENABLE);
+        openTextDoc.setType("text/*");
+        startActivityForResult(openTextDoc, OPEN_TEXT_DOC_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int responseCode,
+                                 Intent resultIntent) {
+        if ((requestCode == OPEN_TEXT_DOC_REQUEST) &&
+                (responseCode == RESULT_OK) &&
+                (resultIntent != null)) {
+
+            Uri uri = resultIntent.getData();
+
+            LoadFileTask loadFileTask = new LoadFileTask(this);
+            loadFileTask.setDataLoadedHandler(this);
+            loadFileTask.execute(uri);
+        }
     }
 
     class DownloadMeaningTask extends AsyncTask<String, Void, String> {
@@ -55,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
          *
          * The format returned by this service is called JSON.  You can find out more about
          * JSON at http://guide.couchdb.org/draft/json.html.
-         *
          *
          */
 
