@@ -161,4 +161,42 @@ public class ContactDBHelper extends SQLiteOpenHelper {
 
         return contacts;
     }
+
+    public boolean updateContact(Contact contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("firstName", contact.getFirstName());
+        values.put("lastName", contact.getLastName());
+        values.put("email", contact.getEmail());
+        values.put("phone", contact.getPhone());
+
+        String[] args = new String[] {
+                "" + contact.getId()
+        };
+
+        int numRowsAffected = db.update(TABLE_NAME, values,
+                                        "_id = ?", args);
+
+        return (numRowsAffected == 1);
+    }
+
+    public boolean deleteContact(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] args = new String[] {
+                "" + id
+        };
+
+        int numRowsAffected = db.delete(TABLE_NAME,
+                                        "_id = ?", args);
+
+        return (numRowsAffected == 1);
+    }
+
+    public void deleteAllContacts() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_NAME, "", new String[] {});
+    }
 }
