@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">IntentsAndUI</string>
-    <string name="action_settings">Settings</string>
-    <string name="not_yet_invoked">Not yet invoked</string>
-    <string name="select_province">Select Profile</string>
-</resources>
