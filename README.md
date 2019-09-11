@@ -4,7 +4,7 @@ These are the in-class example programs from CSCI 4100U.
 
 ## Getting Started
 
-Each directory contains a separate project.  To open this project, choose Open Project in Android Studio and navigate to the folder for the example you wish to investigate.
+Each directory contains a separate project.  To open this project, open the folder in Visual Studio code.  To run this project, use the 'flutter run' command.
 
 ## How Will This Work?
 
