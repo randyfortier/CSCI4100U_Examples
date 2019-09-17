@@ -1,0 +1,85 @@
+name: gamedev
+description: Treasure Dash
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  path_provider:
+  flame:
+  shared_preferences:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/background.png
+    - assets/images/button_background.png
+    - assets/images/parchment.png
+    - assets/images/controls/music-on.png
+    - assets/images/controls/music-off.png
+    - assets/images/controls/arrow-up.png
+    - assets/images/controls/arrow-down.png
+    - assets/images/objects/crate.png
+    - assets/images/objects/stone_block.png
+    - assets/images/coins/shine/shine1.png
+    - assets/images/coins/shine/shine2.png
+    - assets/images/coins/shine/shine3.png
+    - assets/images/coins/shine/shine4.png
+    - assets/images/coins/shine/shine5.png
+    - assets/images/coins/shine/shine6.png
+    - assets/images/adventuregirl/dead1.png
+    - assets/images/adventuregirl/dead2.png
+    - assets/images/adventuregirl/dead3.png
+    - assets/images/adventuregirl/dead4.png
+    - assets/images/adventuregirl/dead5.png
+    - assets/images/adventuregirl/dead6.png
+    - assets/images/adventuregirl/dead7.png
+    - assets/images/adventuregirl/dead8.png
+    - assets/images/adventuregirl/dead9.png
+    - assets/images/adventuregirl/dead10.png
+    - assets/images/adventuregirl/jump1.png
+    - assets/images/adventuregirl/jump2.png
+    - assets/images/adventuregirl/jump3.png
+    - assets/images/adventuregirl/jump4.png
+    - assets/images/adventuregirl/jump5.png
+    - assets/images/adventuregirl/jump6.png
+    - assets/images/adventuregirl/jump7.png
+    - assets/images/adventuregirl/jump8.png
+    - assets/images/adventuregirl/jump9.png
+    - assets/images/adventuregirl/jump10.png
+    - assets/images/adventuregirl/run1.png
+    - assets/images/adventuregirl/run2.png
+    - assets/images/adventuregirl/run3.png
+    - assets/images/adventuregirl/run4.png
+    - assets/images/adventuregirl/run5.png
+    - assets/images/adventuregirl/run6.png
+    - assets/images/adventuregirl/run7.png
+    - assets/images/adventuregirl/run8.png
+    - assets/images/adventuregirl/slide1.png
+    - assets/images/adventuregirl/slide2.png
+    - assets/images/adventuregirl/slide3.png
+    - assets/images/adventuregirl/slide4.png
+    - assets/images/adventuregirl/slide5.png
+    - assets/audio/music/home.mp3
+    - assets/audio/music/menu.mp3
+    - assets/audio/music/gameplay.mp3
+    
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
