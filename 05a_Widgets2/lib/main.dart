@@ -76,10 +76,70 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
+        child: Column(
+          children: <Widget>[
+            ButtonBar(
+              children: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    print('Ok Pressed');
+                  }
+                ),
+                FlatButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    print('Cancel Pressed');
+                  }
+                ),
+              ],
+            ),
+            Text(_pages[_pageIndex].title),
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 50.0),
+          child: ListView.separated(
+            padding: const EdgeInsets.all(8.0),
+            itemCount: 8,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                height: 50,
+                color: Colors.blue[100 + (index * 100)],
+                child: Center(
+                  child: FlatButton(
+                    child: Text('Item #${index + 1}'),
+                    onPressed: () {
+                      print('Item #${index + 1} pressed');
+                    }
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => const Divider(),
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: _pages.map((NavPage page) {
+          return BottomNavigationBarItem(
+            icon: Icon(page.icon),
+            title: Text(page.title),
+          );
+        }).toList(),
+        onTap: (int index) {
+          setState(() {
+            _pageIndex = index;
+          });
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
+        onPressed: () {
+          print('FAB pressed');
+        },
+        tooltip: 'Do the thing!',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
