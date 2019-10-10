@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'scheduled_event.dart';
+
 void main() => runApp(MyApp());
 
 class CustomDialog extends StatelessWidget {
@@ -58,6 +60,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+        '/scheduleEvent': (BuildContext context) {
+          return ScheduleEventPage(title: 'Scheduling Event');
+        },
+      },
     );
   }
 }
@@ -77,6 +84,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.schedule),
+            onPressed: () {
+              _showEventScheduler(context);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -96,6 +111,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<void> _showEventScheduler(BuildContext context) async {
+    /*
+    Navigator.push(
+      context,
+      MaterialPageRoute<ScheduledEvent>(builder: (context) {
+        return ScheduleEventPage(title: 'Schedule Event');
+      }),
+    ).then((ScheduledEvent event) {
+      print('Scheduling event:', event);
+    });
+    */
+    var event = await Navigator.pushNamed(context, '/scheduleEvent');
+    print('Scheduling event:');
+    print(event);
   }
 
   void _customDialog(BuildContext context) {
