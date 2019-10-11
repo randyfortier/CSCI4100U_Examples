@@ -1,3 +1,5 @@
+// CSCI 4100U - 06a Notifications
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -5,77 +7,72 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class Notifications {
   final channelId = 'eventNotifications';
   final channelName = 'Event Notifications';
-  final channelDescription = 'Channel for event notifications';
+  final channelDescription = 'Event Notification Channel';
 
-  var _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   NotificationDetails _platformChannelInfo;
   var notificationId = 100;
 
   void init() {
-    // setup the notification plugin
-    var initSettingsAndroid = AndroidInitializationSettings(
-      'mipmap/ic_launcher',
+    var initializationSettingsAndroid = new AndroidInitializationSettings('assets/logo.png');
+    var initializationSettingsIOS = new IOSInitializationSettings(
+      onDidReceiveLocalNotification: (int id, String title, String body, String payload) { return null; }
     );
-    var initSettingsIOS = IOSInitializationSettings(
-      onDidReceiveLocalNotification: (int id, String title, String body, String payload) {
-         return null;
-      }
+    var initializationSettings = new InitializationSettings(
+      initializationSettingsAndroid, 
+      initializationSettingsIOS
     );
-    var initSettings = InitializationSettings(
-      initSettingsAndroid, initSettingsIOS
-    );
-
     _flutterLocalNotificationsPlugin.initialize(
-      initSettings,
-      onSelectNotification: onSelectNotification,
+      initializationSettings,
+      onSelectNotification: onSelectNotification
     );
 
-    // setup the notification channel
-    var androidChannelInfo = AndroidNotificationDetails(
-      channelId,
-      channelName,
+    // setup a channel for notifications
+    var androidPlatformChannelInfo = AndroidNotificationDetails(
+      channelId, 
+      channelName, 
       channelDescription,
-      importance: Importance.Default,
-      priority: Priority.Default,
-      ticker: 'ticker',
-    );
-    var iosChannelInfo = IOSNotificationDetails();
+      importance: Importance.Max, 
+      priority: Priority.High, 
+      ticker: 'ticker');
 
-    var _platformChannelInfo = NotificationDetails(
-      androidChannelInfo,
-      iosChannelInfo,
+    var iOSPlatformChannelInfo = IOSNotificationDetails();
+    _platformChannelInfo = NotificationDetails(
+      androidPlatformChannelInfo, 
+      iOSPlatformChannelInfo
     );
+
   }
 
-  Future<void> onSelectNotification(var payload) {
+  Future onSelectNotification(var payload) async {
     if (payload != null) {
-      print('onSelectNotification()::payload=$payload');
-      // TODO: Load the appropriate page to the correct data item
+      print('notificationSelected: payload=$payload.');
     }
+    // ... redirect to some part of the app, using payload to view correct data item ...
   }
 
   Future<void> sendNotificationNow(String title, String body, String payload) async {
     _flutterLocalNotificationsPlugin.show(
-      notificationId++,
-      title,
-      body,
+      notificationId++, 
+      title, 
+      body, 
       _platformChannelInfo,
-      payload: payload,
+      payload: payload
     );
   }
 
   Future<void> sendNotificationLater(String title, String body, DateTime when, String payload) async {
     _flutterLocalNotificationsPlugin.schedule(
-      notificationId++,
+      notificationId++, 
       title,
       body,
       when,
       _platformChannelInfo,
-      payload: payload,
+      payload: payload
     );
   }
 
-  Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+  Future<List<PendingNotificationRequest>> getPendingNotificationRequests() async {
     return _flutterLocalNotificationsPlugin.pendingNotificationRequests();
   }
 }
