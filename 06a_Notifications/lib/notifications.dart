@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Notifications {
-  final channelId = 'eventNotifications';
-  final channelName = 'Event Notifications';
-  final channelDescription = 'Event Notification Channel';
+  final channelId = 'testNotifications';
+  final channelName = 'Test Notifications';
+  final channelDescription = 'Test Notification Channel';
 
   var _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   NotificationDetails _platformChannelInfo;
   var notificationId = 100;
 
   void init() {
-    var initializationSettingsAndroid = new AndroidInitializationSettings('assets/logo.png');
+    var initializationSettingsAndroid = new AndroidInitializationSettings('mipmap/ic_launcher');
     var initializationSettingsIOS = new IOSInitializationSettings(
       onDidReceiveLocalNotification: (int id, String title, String body, String payload) { return null; }
     );

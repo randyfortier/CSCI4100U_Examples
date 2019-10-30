@@ -76,7 +76,7 @@ class _MainPageState extends State<MainPage> {
     var pendingNotificationRequests = await _notifications.getPendingNotificationRequests();
     print('Pending requests:');
     for (var pendingRequest in pendingNotificationRequests) {
-      print('${pendingRequest.id}:${pendingRequest.title}/${pendingRequest.body}');
+      print('${pendingRequest.id}/${pendingRequest.title}/${pendingRequest.body}');
     }
   }
 }

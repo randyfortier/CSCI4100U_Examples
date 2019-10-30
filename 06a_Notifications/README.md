@@ -1,4 +1,4 @@
-# notifications
+# dialogs_navigation
 
 A new Flutter project.
 
