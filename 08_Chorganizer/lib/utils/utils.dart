@@ -27,3 +27,7 @@ String getWeekdayNameByIndex(int index) {
     return 'Sunday';
   }
 }
+
+String toTimeString(int hour, int minute) {
+  return '${twoDigits(hour)}:${twoDigits(minute)}';
+}

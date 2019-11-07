@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'menu.dart';
 import 'model/chore_model.dart';
 import 'model/chore.dart';
 
@@ -20,7 +21,7 @@ class _DailyScheduleState extends State<DailySchedule> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Daily Schedule'),
-        // TODO: Menu
+        actions: Menu.createMenu(context),
       ),
       body: Column(
         children: <Widget>[
