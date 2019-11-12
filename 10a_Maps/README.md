@@ -1,4 +1,4 @@
-# maps
+# maps_example
 
 A new Flutter project.
 

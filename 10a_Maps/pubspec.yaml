@@ -1,4 +1,6 @@
-name: maps
+# CSCI 4100U - 10a Maps
+
+name: maps_example
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -23,9 +25,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-
   latlong:
   flutter_map:
+
 
 dev_dependencies:
   flutter_test:
