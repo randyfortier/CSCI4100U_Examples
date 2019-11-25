@@ -7,10 +7,13 @@ import 'package:flame/game.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'gfx/level.dart';
+import 'gfx/player.dart';
 import 'ui/screen.dart';
 import 'ui/background.dart';
 import 'ui/image_button.dart';
 import 'ui/image_toggle_button.dart';
+import 'ui/text.dart';
 
 class TreasureDashGame extends Game {
   Size screenSize;
@@ -26,11 +29,19 @@ class TreasureDashGame extends Game {
   ImageButton playAgainButton;
 
   Background background;
+  Level level;
+  Player player;
+  ImageButton jumpButton;
+  ImageButton slideButton;
 
   int score;
-  
-  //Level level;
-  //Player player;
+  int highScore = 0;
+  bool gameOver = false;
+
+  Text currentScoreText;
+  Text highScoreText;
+
+  Text gameOverText;
 
   final SharedPreferences storage;
 
@@ -39,13 +50,22 @@ class TreasureDashGame extends Game {
   }
 
   Future<void> initialize() async {
+    // start a new game
+    score = 0;
+
+    // load high score
+    highScore = storage.containsKey('highScore') ? storage.get('highScore') : 0;
+
     frameDelay = 1.0 / fps;
 
     resize(await Flame.util.initialDimensions());
 
     tileSize = 50;
+    level = Level(screenSize: screenSize, tileSize: tileSize);
 
     background = Background(this);
+
+    // buttons for the main menu
 
     playButton = ImageButton(
       screenSize: screenSize,
@@ -118,6 +138,108 @@ class TreasureDashGame extends Game {
       }
     );
 
+    // elements for the gameplay screen
+
+    player = Player(
+      screenSize: screenSize,
+      frameDelay: frameDelay * 2,
+      jumpSpeed: 11.0,
+      gameOverCallback: () {
+        gameOver = true;
+        currentScreen = Screen.playagain;
+      }
+    );
+
+    jumpButton = ImageButton(
+      screenSize: screenSize,
+      image: 'controls/arrow-up.png',
+      text: ' ',
+      textSize: 30,
+      xPadding: 40,
+      yPadding: 25,
+      xOffset: 0,
+      yOffset: 5,
+      xTextOffset: 0,
+      yTextOffset: 0,
+      xPosRatio: 0.9,
+      yPosRatio: 0.3,
+      onClick: () {
+        player.jump();
+      }
+    );
+
+    slideButton = ImageButton(
+      screenSize: screenSize,
+      image: 'controls/arrow-down.png',
+      text: ' ',
+      textSize: 30,
+      xPadding: 40,
+      yPadding: 25,
+      xOffset: 0,
+      yOffset: 5,
+      xTextOffset: 0,
+      yTextOffset: 0,
+      xPosRatio: 0.9,
+      yPosRatio: 0.7,
+      onClick: () {
+        player.slide();
+      }
+    );
+
+    currentScoreText = Text(
+      screenSize: screenSize,
+      text: 'Score: $score',
+      textSize: 30,
+      xOffset: 0,
+      yOffset: 0,
+      xPosRatio: 0.2,
+      yPosRatio: 0.1,
+    );
+
+    highScoreText = Text(
+      screenSize: screenSize,
+      text: 'High Score: $highScore',
+      textSize: 30,
+      xOffset: 0,
+      yOffset: 0,
+      xPosRatio: 0.8,
+      yPosRatio: 0.1,
+    );
+
+    // play again screen elements
+
+    gameOverText = Text(
+      screenSize: screenSize,
+      text: 'Game Over',
+      textSize: 70,
+      xOffset: 0,
+      yOffset: 0,
+      xPosRatio: 0.5,
+      yPosRatio: 0.4,
+    );
+
+    playAgainButton = ImageButton(
+      screenSize: screenSize,
+      image: 'button_background.png',
+      text: 'Play Again',
+      textSize: 50,
+      xPadding: 60,
+      yPadding: 35,
+      xOffset: 0,
+      yOffset: 5,
+      xTextOffset: 0,
+      yTextOffset: 0,
+      xPosRatio: 0.5,
+      yPosRatio: 0.7,
+      onClick: () {
+        goToGameState(Screen.gameplay);
+        level.initialize();
+        player.reset();
+        score = 0;
+        gameOver = false;
+      }
+    );
+
     currentScreen = Screen.menu;
   }
 
@@ -134,11 +256,43 @@ class TreasureDashGame extends Game {
       creditsButton?.render(canvas);
       quitButton?.render(canvas);
       musicButton?.render(canvas);
+    } else if (currentScreen == Screen.gameplay) {
+      level?.render(canvas);
+      player?.render(canvas);
+      jumpButton?.render(canvas);
+      slideButton?.render(canvas);
+      currentScoreText?.render(canvas);
+      highScoreText?.render(canvas);
+    } else if (currentScreen == Screen.playagain) {
+      gameOverText?.render(canvas);
+      playAgainButton?.render(canvas);
     }
   }
 
   void update(double dt) {
-    // TODO: Gameplay updates
+    // Gameplay updates
+    if (!gameOver && currentScreen == Screen.gameplay) {
+      level?.update(dt);
+      player?.update(dt);
+
+      // handle collisions with obstacles and coins
+      int scoreIncrease = level?.checkPlayerCollisions(player);
+      addToScore(scoreIncrease);
+    }
+  }
+
+  void addToScore(int amount) {
+    score += amount;
+    currentScoreText.setText('Score: $score');
+
+    // check if we have a new high score
+    if (score > highScore) {
+      highScore = score;
+      highScoreText.setText('High Score: $highScore');
+
+      // save the new high score
+      storage.setInt('highScore', highScore);
+    }
   }
 
   void resize(Size size) {
@@ -165,5 +319,10 @@ class TreasureDashGame extends Game {
     isHandled = passTapIfNecessary(Screen.menu, creditsButton, event);
     isHandled = passTapIfNecessary(Screen.menu, quitButton, event);
     isHandled = passTapIfNecessary(Screen.menu, musicButton, event);
+
+    isHandled = passTapIfNecessary(Screen.gameplay, jumpButton, event);
+    isHandled = passTapIfNecessary(Screen.gameplay, slideButton, event);
+
+    isHandled = passTapIfNecessary(Screen.playagain, playAgainButton, event);
   }
 }

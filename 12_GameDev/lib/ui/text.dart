@@ -20,6 +20,7 @@ class Text {
 
   Text({
     this.screenSize,
+    this.text, this.textSize,
     this.colour, this.shadowColour,
     this.xOffset, this.yOffset,
     this.xPosRatio, this.yPosRatio,
