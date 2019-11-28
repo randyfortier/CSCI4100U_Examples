@@ -1,0 +1,9 @@
+﻿{
+    "login": {
+        "username": "Nome de usuário:",
+        "password": "Senha:",
+        "login": "Iniciar sessão",
+        "loginincorrect": "Credenciais de acesso incorrectas",
+        "loginsuccess": "Iniciar sessão com êxito"
+    }
+}

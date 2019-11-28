@@ -1,0 +1,9 @@
+{
+    "login": {
+        "username": "Username:",
+        "password": "Password:",
+        "login": "Sign In",
+        "loginincorrect": "Login Incorrect",
+        "loginsuccess": "Login successful:  {username}"
+    }
+}
