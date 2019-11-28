@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'i18n'),
+      home: MainPage(title: 'i18n'),
       localizationsDelegates: [
         FlutterI18nDelegate(
           useCountryCode: false,
@@ -29,31 +29,91 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
+  String _username;
+  String _password;
+  bool _validLogin = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('EN'),
+            onPressed: () {
+              Locale newLocale = Locale('en');
+              setState(() {
+                FlutterI18n.refresh(context, newLocale);
+              });
+            },
+          ),
+          FlatButton(
+            child: Text('PT'),
+            onPressed: () {
+              Locale newLocale = Locale('pt');
+              setState(() {
+                FlutterI18n.refresh(context, newLocale);
+              });
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              _validLogin ? FlutterI18n.translate(
+                context, 
+                'login.loginsuccess',
+                {'username': _username},
+              ) : FlutterI18n.translate(
+                context, 
+                'login.loginincorrect',
+              )
             ),
-          ],
-        ),
+          ),
+          ListTile(
+            leading: Text(FlutterI18n.translate(context, 'login.username')),
+            title: TextField(
+              controller: TextEditingController(text: _username),
+              onChanged: (value) { _username = value; }
+            ),
+          ),
+          ListTile(
+            leading: Text(FlutterI18n.translate(context, 'login.password')),
+            title: TextField(
+              controller: TextEditingController(text: _password),
+              onChanged: (value) { _password = value; }
+            ),
+          ),
+          ListTile(
+            title: FlatButton(
+              child: Text(FlutterI18n.translate(context, 'login.login')),
+              onPressed: () {
+                if (_username == 'admin' && _password == '12345') {
+                  setState(() {
+                    _validLogin = true;
+                  });
+                } else {
+                  setState(() {
+                    _validLogin = false;
+                  });
+                }
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
